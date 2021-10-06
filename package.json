@@ -1,0 +1,22 @@
+{
+  "name": "dollars-bank-javascript-app",
+  "version": "1.0.0",
+  "description": "A practice project for Cognixia's JUMPlus program, using Node.js and JavaScript to make a simple CLI banking service.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NicholasCrossman/dollars-bank-javascript-app.git"
+  },
+  "author": "Nicholas Crossman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NicholasCrossman/dollars-bank-javascript-app/issues"
+  },
+  "homepage": "https://github.com/NicholasCrossman/dollars-bank-javascript-app#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
