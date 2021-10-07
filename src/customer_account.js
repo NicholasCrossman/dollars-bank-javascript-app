@@ -8,16 +8,17 @@ class customer_account {
         this.password = password;
         this.transactions = [];
         this.balance = 0.0;
+        this.transaction(initialBalance, "Initial balance.");
     }
 
-    transaction = (amount) => {
+    transaction = (amount, message) => {
         if(amount > 0) {
             // the transaction is a deposit
             // no errors need to be checked
             const oldBalance = this.balance;
             this.balance += amount;
             // add the transaction to the log
-            this.recordTransaction(oldBalance, amount);
+            this.recordTransaction(oldBalance, amount, message);
             return true; // confirm the operation is a success
         }
         else if(amount < 0) {
@@ -32,7 +33,7 @@ class customer_account {
             const oldBalance = this.balance;
             this.balance += amount;
             // add the transaction to the log
-            this.recordTransaction(oldBalance, amount);
+            this.recordTransaction(oldBalance, amount, message);
             return true;
         }
         else {
@@ -42,12 +43,13 @@ class customer_account {
         }
     }
 
-    recordTransaction = (oldBalance, amount) => {
+    recordTransaction = (oldBalance, amount, message) => {
         let transaction = {
             previousBalance: oldBalance,
             amount: amount,
             newBalance: this.balance,
-            time: new Date()
+            time: new Date(),
+            message: message
         }
         this.transactions.push(transaction);
     }
@@ -72,3 +74,5 @@ class customer_account {
         return this.transactions;
     }
 }
+
+export default customer_account;
