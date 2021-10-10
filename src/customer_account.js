@@ -1,11 +1,11 @@
 
 class customer_account {
 
-    constructor(email, firstName, lastName, password, initialBalance) {
+    constructor(email, name, account_id, pin, initialBalance) {
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
+        this.name = name;
+        this.account_id = account_id;
+        this.pin = pin;
         this.transactions = [];
         this.balance = 0.0;
         this.transaction(initialBalance, "Initial balance.");
@@ -17,29 +17,27 @@ class customer_account {
             // no errors need to be checked
             const oldBalance = this.balance;
             this.balance += amount;
-            // add the transaction to the log
-            this.recordTransaction(oldBalance, amount, message);
-            return true; // confirm the operation is a success
+            // add the transaction to the log and return it
+            return this.recordTransaction(oldBalance, amount, message);
         }
         else if(amount < 0) {
             // the transaction is a withdrawl. Check for overdraft before subtracting.
             const isOverdraft = (this.balance + amount) < 0;
             if(isOverdraft) {
                 // reject the operation, return false
-                return false;
+                return null;
             }
             // if it's not an overdraft
             // do the withdrawl
             const oldBalance = this.balance;
             this.balance += amount;
-            // add the transaction to the log
-            this.recordTransaction(oldBalance, amount, message);
-            return true;
+            // add the transaction to the log and return it
+            return this.recordTransaction(oldBalance, amount, message);
         }
         else {
             // the amount is zero
             // do nothing, but return a success
-            return true;
+            return 0;
         }
     }
 
@@ -52,6 +50,7 @@ class customer_account {
             message: message
         }
         this.transactions.push(transaction);
+        return transaction;
     }
 
     lastFiveTransactions = () => {
