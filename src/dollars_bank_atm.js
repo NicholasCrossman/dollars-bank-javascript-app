@@ -1,4 +1,4 @@
-import customer_account from "./customer_account";
+import customer_account from "./customer_account.js";
 
 class dollars_bank_atm {
 
