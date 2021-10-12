@@ -4,43 +4,84 @@ class dollars_bank_atm {
 
     constructor() {
         this.accounts = {};
+        this.currentAccount = null;
+        this.addAccount("bork@gmail.com", "Bork Borksson", "1234", 35.00);
+    }
+
+    // sets the current active account
+    login = (email, pin) => {
+        //console.log(`Login: ${email}, ${pin}`);
+        for(let key in this.accounts) {
+            let account = this.accounts[key];
+            console.log(`Account: ${JSON.stringify(account)}`);
+            if(account.email == email) {
+                if(account.pin == pin) {
+                    console.log("Logged in.");
+                    this.currentAccount = account;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    accountInfo = () => {
+        return this.currentAccount.accountInfo();
+    }
+
+    updatePin = (oldPin, newPin) => {
+        // make sure the old pin matches
+        if(oldPin != this.currentAccount.pin) {
+            return false;
+        }
+        this.currentAccount.pin = newPin;
+        return true;
     }
 
     // basic operations methods
 
-    deposit = (account_id, amount) => {
-        let account = this.getAccount(account_id);
-        if(account == null) {
+    balance = () => {
+        // make sure the active account is set
+        if(this.currentAccount == null) {
             return null;
         }
+        return parseFloat(this.currentAccount.balance);
+    }
+
+    deposit = (amount) => {
+        // make sure the active account is set
+        if(this.currentAccount == null) {
+            return null;
+        }
+        
         if(amount <= 0) {
             // reject the deposit if the amount is negative or zero
             return null;
         }
         // otherwise, perform the deposit as normal and return the transaction
-        return account.transaction(amount, "Deposit of $" + amount);
+        return this.currentAccount.transaction(amount, "Deposit of $" + amount);
     }
 
-    withdrawl = (account_id, amount) => {
-        let account = this.getAccount(account_id);
-        if(account == null) {
+    withdrawl = (amount) => {
+        // make sure the active account is set
+        if(this.currentAccount == null) {
             return null;
         }
+        
         if(amount <= 0) {
             // reject the withdrawl if the amount is negative or zero
             return null;
         }
         // otherwise, perform the withdrawl as normal and return the transaction
         amount = amount * -1; // make amount a negative value
-        return account.transaction(amount, "Withdrawl of $" + amount);
+        return this.currentAccount.transaction(amount, "Withdrawl of $" + amount);
     }
 
-    fiveReventTransactions = (account_id) => {
-        let account = this.getAccount(account_id);
-        if(account == null) {
+    fiveReventTransactions = () => {
+        if(this.currentAccount == null) {
             return null;
         }
-        return account.lastFiveTransactions();
+        return this.currentAccount.lastFiveTransactions();
     }
 
     transfer = (accountId1, accountId2, amount) => {
@@ -80,6 +121,7 @@ class dollars_bank_atm {
         let account = new customer_account(email, name, accountId, pin, initialBalance);
         console.log("ATM: Account: " + JSON.stringify(account));
         this.accounts[accountId] = account;
+        return account;
     }
 
     // returns a unique ID for use in the Account

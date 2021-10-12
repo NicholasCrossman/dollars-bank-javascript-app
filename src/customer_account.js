@@ -16,13 +16,13 @@ class customer_account {
             // the transaction is a deposit
             // no errors need to be checked
             const oldBalance = this.balance;
-            this.balance += amount;
+            this.balance += parseFloat(amount);
             // add the transaction to the log and return it
             return this.recordTransaction(oldBalance, amount, message);
         }
         else if(amount < 0) {
             // the transaction is a withdrawl. Check for overdraft before subtracting.
-            const isOverdraft = (this.balance + amount) < 0;
+            const isOverdraft = (this.balance + parseFloat(amount)) < 0;
             if(isOverdraft) {
                 // reject the operation, return false
                 return null;
@@ -30,7 +30,7 @@ class customer_account {
             // if it's not an overdraft
             // do the withdrawl
             const oldBalance = this.balance;
-            this.balance += amount;
+            this.balance += parseFloat(amount);
             // add the transaction to the log and return it
             return this.recordTransaction(oldBalance, amount, message);
         }
@@ -43,9 +43,9 @@ class customer_account {
 
     recordTransaction = (oldBalance, amount, message) => {
         let transaction = {
-            previousBalance: oldBalance,
-            amount: amount,
-            newBalance: this.balance,
+            previousBalance: parseFloat(oldBalance),
+            amount: parseFloat(amount),
+            newBalance: parseFloat(this.balance),
             time: new Date(),
             message: message
         }
@@ -71,6 +71,14 @@ class customer_account {
         }
         // if there are less than 5, return them all
         return this.transactions;
+    }
+
+    accountInfo = () => {
+        return {
+            name: this.name,
+            email: this.email,
+            id: this.account_id
+        }
     }
 }
 
