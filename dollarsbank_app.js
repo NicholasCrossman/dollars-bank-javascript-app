@@ -13,9 +13,10 @@ import dollars_bank_atm from './src/dollars_bank_atm.js';
         else if(transaction_or_new_account == 2) {
             console.log("New Account selected.");
             // new account selected
-            let newAccountInfo = view.newAccount();
-            console.log("New Account: " + JSON.stringify(newAccountInfo));
-            // TODO: pass the new account on to the ATM
+            let newAccount = view.newAccount();
+            atm.addAccount(newAccount.email, newAccount.name, 
+                newAccount.pin, newAccount.initialBalance);
+            console.log("New Account: " + JSON.stringify(newAccount));
 
         }
     }

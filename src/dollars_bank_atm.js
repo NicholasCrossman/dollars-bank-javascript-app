@@ -3,7 +3,7 @@ import customer_account from "./customer_account.js";
 class dollars_bank_atm {
 
     constructor() {
-        this.accounts = [];
+        this.accounts = {};
     }
 
     // basic operations methods
@@ -75,9 +75,38 @@ class dollars_bank_atm {
 
     // account methods
 
-    addAccount = (email, name, account_id, pin, initialBalance) => {
-        let account = new customer_account(email, name, account_id, pin, initialBalance);
-        this.accounts.push(account);
+    addAccount = (email, name, pin, initialBalance) => {
+        let accountId = this.randomId();
+        let account = new customer_account(email, name, accountId, pin, initialBalance);
+        console.log("ATM: Account: " + JSON.stringify(account));
+        this.accounts[accountId] = account;
+    }
+
+    // returns a unique ID for use in the Account
+    randomId = () => {
+        let id = null;
+        do {
+            id = this.randomInt();
+        } while (this.keyExists(id));
+        return id;
+    }
+
+    // private helper to generate a random int
+    // returns a value between 1 and 10000
+    randomInt = () => {
+        return Math.floor(
+            Math.random() * (10000 - 1) + 1
+        )
+    }
+
+    // used to make sure the ID is unique
+    keyExists = (id) => {
+        for(let key in this.accounts) {
+            if(id === key) {
+                return true;
+            }
+        }
+        return false;
     }
 
     getAccount = (id) => {
