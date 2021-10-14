@@ -53,6 +53,7 @@ import dollars_bank_atm from './src/dollars_bank_atm.js';
                             break;
                         case 6:
                             let accountsToTransfer = atm.allOtherAccounts();
+                            console.log("Accounts: " + JSON.stringify(accountsToTransfer));
                             let transfer = view.transfer(accountsToTransfer);
                             let transferSuccess = atm.transfer(transfer.account, transfer.amount);
                             while(!transferSuccess) {

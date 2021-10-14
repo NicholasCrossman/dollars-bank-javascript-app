@@ -60,7 +60,7 @@ class application_views {
     }
 
     displayTransactions = (transactions) => {
-        console.log("Time\t\t\t\tMessage\t\t\tBefore\t\tAmount\t\tAfter");
+        console.log("Time\t\t\t\tMessage\t\t\t\tBefore\t\tAmount\t\tAfter");
         for(let i = 0; i < transactions.length; i++) {
             let t = transactions[i]; // get the next transaction
             let date = dateFormat(t.time);
@@ -71,7 +71,7 @@ class application_views {
     // used to view a single transaction
     viewTransaction = (t) => {
         console.log("Transaction successful!\n");
-        console.log("Time\t\t\t\tMessage\t\t\tBefore\t\tAmount\t\tAfter");
+        console.log("Time\t\t\t\tMessage\t\t\t\tBefore\t\tAmount\t\tAfter");
         let date = dateFormat(t.time);
         console.log(`${date}\t${t.message}\t${t.previousBalance}\t\t${t.amount}\t\t${t.newBalance}`);
     }
@@ -86,9 +86,10 @@ class application_views {
     // used to transfer money to another account
     transfer = (accounts) => {
         // show a list of accounts
-        for(let account in accounts) {
+        for(let i = 0; i < accounts.length; i++) {
+            let account = accounts[i];
             console.log(`Account ID\tName\tEmail`);
-            console.log(`${account.account_id}\t${account.name}\t${account.email}`);
+            console.log(`${account.id}\t${account.name}\t${account.email}`);
         }
         let target = readlineSync.questionInt("Please enter an Account ID to transfer: ");
         let amount = readlineSync.questionFloat("Amount to transfer: ");
