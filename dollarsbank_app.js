@@ -52,6 +52,22 @@ import dollars_bank_atm from './src/dollars_bank_atm.js';
                             view.viewTransaction(depositReport);
                             break;
                         case 6:
+                            let accountsToTransfer = atm.allOtherAccounts();
+                            let transfer = view.transfer(accountsToTransfer);
+                            let transferSuccess = atm.transfer(transfer.account, transfer.amount);
+                            while(!transferSuccess) {
+                                // it failed, so prompt again
+                                console.log("Transfer failed. This means your balance was insufficient, or " + 
+                                " the target account cannot be found. Please try again: ");
+                                transfer = view.transfer(accountsToTransfer);
+                                transferSuccess = atm.transfer(transfer.account, transfer.amount);
+                            }
+                            // show the transaction
+                            console.log("Transfer successful!");
+                            let transferTransaction = atm.lastTransaction();
+                            view.viewTransaction(transferTransaction);
+                            break;
+                        case 7:
                             //customer information
                             let info = atm.accountInfo();
                             view.viewAccount(info);

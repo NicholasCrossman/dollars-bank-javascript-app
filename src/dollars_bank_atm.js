@@ -29,6 +29,23 @@ class dollars_bank_atm {
         return this.currentAccount.accountInfo();
     }
 
+    /**
+     * Returns all accounts but the current one. Used to 
+     * show options for a transfer.
+     * Returns an array of accountInfo.
+     */
+    allOtherAccounts = () => {
+        let otherAccounts = [];
+        for(let key in this.accounts) {
+            if(key != this.currentAccount.account_id) {
+                // as long as it's not the current account
+                // add it to the return object
+                otherAccounts.push(this.accounts[key].accountInfo());
+            }
+        }
+        return otherAccounts;
+    }
+
     updatePin = (oldPin, newPin) => {
         // make sure the old pin matches
         if(oldPin != this.currentAccount.pin) {
@@ -77,6 +94,10 @@ class dollars_bank_atm {
         return this.currentAccount.transaction(amount, "Withdrawl of $" + amount);
     }
 
+    /**
+     * Shows the five most recent transactions.
+     * @returns An array of the 5 most recent transactions.
+     */
     fiveReventTransactions = () => {
         if(this.currentAccount == null) {
             return null;
@@ -84,9 +105,32 @@ class dollars_bank_atm {
         return this.currentAccount.lastFiveTransactions();
     }
 
-    transfer = (accountId1, accountId2, amount) => {
+    /**
+     * Returns the most recent transaction. Used to show an operation was 
+     * successful.
+     * @returns Returns a transaction object.
+     */
+    lastTransaction = () => {
+        if(this.currentAccount == null) {
+            return null;
+        }
+        let trans = this.currentAccount.transactions;
+        // return the most recent transaction
+        return trans[trans.length - 1];
+    }
+
+    /**
+     * Transfers mooney from the current account to another.
+     * Returns true if successful, and false if the second account 
+     * doesn't exist or the current account's balance is insufficient.
+     * @param int accountId2 - The integer ID of the target account.
+     * @param float amount - The amount to transfer.
+     * @returns True if successful, and false if the second account is not found 
+     *          or currentAccount has insufficient balance.
+     */
+    transfer = (accountId2, amount) => {
         // make sure both accounts exist
-        let account1 = this.getAccount(accountId1);
+        let account1 = this.currentAccount;
         let account2 = this.getAccount(accountId2);
         // return false if either account doesn't exist
         if(account1 == null || account2 == null) {
@@ -152,8 +196,8 @@ class dollars_bank_atm {
     }
 
     getAccount = (id) => {
-        for(let i = 0; i < this.accounts.length; i++) {
-            let account = this.accounts[i];
+        for(let key in this.accounts) {
+            let account = this.accounts[key];
             if(account.account_id == id) {
                 return account;
             }

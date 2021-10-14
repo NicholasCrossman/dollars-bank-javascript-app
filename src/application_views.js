@@ -46,6 +46,7 @@ class application_views {
             "Update PIN", 
             "Withdraw Amount", 
             "Deposit Amount", 
+            "Transfer",
             "Customer Information"];
         let index = readlineSync.keyInSelect(options, "Transaction Menu: ");
         // prevents a 0 for being returned from option 1
@@ -70,7 +71,7 @@ class application_views {
     // used to view a single transaction
     viewTransaction = (t) => {
         console.log("Transaction successful!\n");
-        console.log("Time\t\t\t\tMessage\t\tBefore\t\tAmount\t\tAfter");
+        console.log("Time\t\t\t\tMessage\t\t\tBefore\t\tAmount\t\tAfter");
         let date = dateFormat(t.time);
         console.log(`${date}\t${t.message}\t${t.previousBalance}\t\t${t.amount}\t\t${t.newBalance}`);
     }
@@ -80,6 +81,24 @@ class application_views {
         console.log(`Name: ${info.name}`);
         console.log(`Email: ${info.email}`);
         console.log(`Account ID: ${info.id}`);
+    }
+
+    // used to transfer money to another account
+    transfer = (accounts) => {
+        // show a list of accounts
+        for(let account in accounts) {
+            console.log(`Account ID\tName\tEmail`);
+            console.log(`${account.account_id}\t${account.name}\t${account.email}`);
+        }
+        let target = readlineSync.questionInt("Please enter an Account ID to transfer: ");
+        let amount = readlineSync.questionFloat("Amount to transfer: ");
+        while(amount <= 0) {
+            amount = readlineSync.questionFloat("Please enter a positive value to transfer: ");
+        }
+        return {
+            account: target,
+            amount: amount
+        }
     }
 
     // update the current account's pin
