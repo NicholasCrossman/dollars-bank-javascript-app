@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/NicholasCrossman/dollars-bank-javascript-app#readme",
   "dependencies": {
+    "colors": "^1.4.0",
     "dateformat": "^5.0.1",
     "express": "^4.17.1",
     "readline-sync": "^1.4.10"
