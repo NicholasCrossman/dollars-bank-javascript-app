@@ -43,10 +43,12 @@ class application_views {
     }
 
     transaction = () => {
-        let yesOrEmpty = readlineSync.keyInYN("Perform another transaction?".green);
-        // if it's empty or false, exit the program
-        if(yesOrEmpty === '' || yesOrEmpty == false) {
-            process.exit();
+        let yesOrNo = readlineSync.keyInYN("Perform another transaction?".green);
+        // this returns a boolean. True if 'y' is entered, and false otherwise.
+        if(!yesOrNo) {
+            // exit the program gracefully
+            console.log("Goodbye.".green);
+            process.exit(1);
         }
         // otherwise the value is true. Continue the prompt
         let options = ["Account Balance Check", 
