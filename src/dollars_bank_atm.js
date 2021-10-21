@@ -8,12 +8,16 @@ class dollars_bank_atm {
         this.addAccount("bork@gmail.com", "Bork Borksson", "1234", 35.00);
     }
 
-    // sets the current active account
+    /**
+     * Allows the user to log in, and sets the currentAccount to the user's account if the 
+     * login is successful. Returns true if the login succeeds, and false if it fails.
+     * @param {*} email String - The user's email.
+     * @param {*} pin int - The user's 4-digit PIN code.
+     * @returns boolean - True if the login succeeds, false otherwise.
+     */
     login = (email, pin) => {
-        //console.log(`Login: ${email}, ${pin}`);
         for(let key in this.accounts) {
             let account = this.accounts[key];
-            console.log(`Account: ${JSON.stringify(account)}`);
             if(account.email == email) {
                 if(account.pin == pin) {
                     console.log("Logged in.");
@@ -25,6 +29,7 @@ class dollars_bank_atm {
         return false;
     }
 
+    // returns the accountInfo of the current account
     accountInfo = () => {
         return this.currentAccount.accountInfo();
     }
@@ -46,6 +51,13 @@ class dollars_bank_atm {
         return otherAccounts;
     }
 
+    /**
+     * Updates the current account's PIN. Takes in the old PIN for confirmation, and 
+     * the new PIN.
+     * @param {*} oldPin int - The old 4-digit PIN.
+     * @param {*} newPin int - The new 4-digit PIN.
+     * @returns boolean - True if the update succeeds, and false if the PINs are the same.
+     */
     updatePin = (oldPin, newPin) => {
         // make sure the old pin matches
         if(oldPin != this.currentAccount.pin) {
@@ -57,6 +69,11 @@ class dollars_bank_atm {
 
     // basic operations methods
 
+    /**
+     * Returns the current account's balance.
+     * @returns float - The account's balance, and null if no account 
+     *                  is set.
+     */
     balance = () => {
         // make sure the active account is set
         if(this.currentAccount == null) {
@@ -65,6 +82,12 @@ class dollars_bank_atm {
         return parseFloat(this.currentAccount.balance);
     }
 
+    /**
+     * Allows the user to make a deposit into the current account. Takes in the amount, 
+     * which must be positive.
+     * @param {*} amount float - The amount to deposit, which must be positive.
+     * @returns Object - The transaction if it succeeds, and null if the amount is invalid.
+     */
     deposit = (amount) => {
         // make sure the active account is set
         if(this.currentAccount == null) {
@@ -79,6 +102,12 @@ class dollars_bank_atm {
         return this.currentAccount.transaction(amount, "Deposit of $" + amount);
     }
 
+    /**
+     * Allows the user to make a withdrawl from the current account. Takes in the amount, 
+     * which must be positive.
+     * @param {*} amount float - The amount to withdraw, which must be positive.
+     * @returns Object - The transaction if it succeeds, and null if the amount is invalid.
+     */
     withdrawl = (amount) => {
         // make sure the active account is set
         if(this.currentAccount == null) {
@@ -120,7 +149,7 @@ class dollars_bank_atm {
     }
 
     /**
-     * Transfers mooney from the current account to another.
+     * Transfers money from the current account to another.
      * Returns true if successful, and false if the second account 
      * doesn't exist or the current account's balance is insufficient.
      * @param int accountId2 - The integer ID of the target account.
@@ -160,8 +189,21 @@ class dollars_bank_atm {
 
     // account methods
 
+    /**
+     * 
+     * @param {*} email 
+     * @param {*} name 
+     * @param {*} pin 
+     * @param {*} initialBalance 
+     * @returns 
+     */
     addAccount = (email, name, pin, initialBalance) => {
+        // generate a random ID
         let accountId = this.randomId();
+        // make sure the email is unique
+        if(this.emailExists(email)) {
+            return null;
+        }
         let account = new customer_account(email, name, accountId, pin, initialBalance);
         console.log("ATM: Account: " + JSON.stringify(account));
         this.accounts[accountId] = account;
@@ -185,10 +227,31 @@ class dollars_bank_atm {
         )
     }
 
-    // used to make sure the ID is unique
+    /**
+     * Used to make sure the user's ID is unique. Returns true if it exists, 
+     * and false otherwise.
+     * @param id int - The auto-generated ID.
+     * @returns True if the ID exists, and false otherwise.
+     */ 
     keyExists = (id) => {
         for(let key in this.accounts) {
             if(id === key) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Used to make sure the user's email is unique. Returns true if it exists, 
+     * and false otherwise.
+     * @param String - The user's email.
+     * @returns True if the email exists, and false otherwise.
+     */ 
+    emailExists = (email) => {
+        for(let key in this.accounts) {
+            let accountEmail = this.accounts[key].email;
+            if(email === accountEmail) {
                 return true;
             }
         }

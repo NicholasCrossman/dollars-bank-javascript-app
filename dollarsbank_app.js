@@ -84,8 +84,12 @@ import dollars_bank_atm from './src/dollars_bank_atm.js';
                 console.log("New Account selected.");
                 // new account selected
                 let newAccount = view.newAccount();
-                let account = atm.addAccount(newAccount.email, newAccount.name, 
+                let accountValid = atm.addAccount(newAccount.email, newAccount.name, 
                     newAccount.pin, newAccount.initialBalance);
+                if(accountValid == null) {
+                    // the email was not unique. Take them back to the initial prompt to login or create a new account
+                    console.log("An account with that email already exists. Please login or try again.");
+                }
 
             }
         }
